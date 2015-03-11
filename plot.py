@@ -2,16 +2,21 @@
 
 import yt
 from os.path import join
+import argparse
+import glob
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--dir', help='data directory',
+    default="/home/miguel/project/hydro/runs/piernik/")
+args = parser.parse_args(
 
 # Load the dataset.
-basedir = "/home/miguel/mnt/piernik/runs/roche"
-ds = yt.load(join(basedir, "roche_tst_0020.h5"))
-
+# ds = yt.load(join(basedir, "roche_tst_0020.h5"))
 # Create density slices in all three axes.
 print(ds.field_list)
 print(ds.domain_width)
 
-for i in range(33):
-    ds = yt.load(join(basedir, "roche_tst_00{:02d}.h5".format(i)))
+for i in glob.glob(join(args.dir, '*.h5')):
+    ds = yt.load(i)
     p = yt.SlicePlot(ds, "z", "denn")
     p.save()
