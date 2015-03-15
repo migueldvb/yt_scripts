@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 
 import yt
 from os.path import join
@@ -20,7 +20,8 @@ def plot_h5(filename):
     ds = yt.load(filename)
     print(ds.field_list)
     print(ds.domain_width)
-    p = yt.SlicePlot(ds, args.axis, "deni", center=[0.5, 0.5, 0.5],
+    p = yt.SlicePlot(ds, args.axis, "deni",
+            center=ds.arr([0.5, 0.5, 0.5], 'unitary'),
             origin="native")
     p.save()
 
