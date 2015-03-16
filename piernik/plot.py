@@ -10,6 +10,8 @@ parser.add_argument('--dir', help='data directory',
     default="/home/miguel/project/hydro/runs/piernik/")
 parser.add_argument('-f', '--filename', help='HDF5 file', default="")
 parser.add_argument('-a', '--axis', type=int, help='axis', default=2)
+parser.add_argument('--field', help='field variable', default="deni",
+        choices=('deni', 'vlxi', 'vlyi', 'vlzi'))
 args = parser.parse_args()
 
 # Load the dataset.
@@ -20,7 +22,7 @@ def plot_h5(filename):
     ds = yt.load(filename)
     print(ds.field_list)
     print(ds.domain_width)
-    p = yt.SlicePlot(ds, args.axis, "deni",
+    p = yt.SlicePlot(ds, args.axis, args.field,
             axes_unit='au',
 #             center=([0.5, 0.5, 0.], 'unitary'),
             origin="native")
