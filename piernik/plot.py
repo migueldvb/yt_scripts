@@ -21,7 +21,8 @@ def plot_h5(filename):
     print(ds.field_list)
     print(ds.domain_width)
     p = yt.SlicePlot(ds, args.axis, "deni",
-            center=ds.arr([0.5, 0.5, 0.5], 'unitary'),
+            axes_unit='au',
+#             center=([0.5, 0.5, 0.], 'unitary'),
             origin="native")
     p.save()
 
