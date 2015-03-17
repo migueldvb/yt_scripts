@@ -11,7 +11,8 @@ parser.add_argument('--dir', help='data directory',
 parser.add_argument('-f', '--filename', help='HDF5 file', default="")
 parser.add_argument('-a', '--axis', type=int, help='axis', default=2)
 parser.add_argument('--field', help='field variable', default="density",
-        choices=('density', 'dens', 'deni', 'vlxi', 'vlyi', 'vlzi'))
+        choices=('density', 'velocity_x', 'velocity_y',
+            'dens', 'deni', 'vlxi', 'vlyi', 'vlzi'))
 args = parser.parse_args()
 
 # Load the dataset.
