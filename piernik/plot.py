@@ -13,6 +13,8 @@ parser.add_argument('-a', '--axis', type=int, help='axis', default=2)
 parser.add_argument('--field', help='field variable', default="density",
         choices=('density', 'velocity_x', 'velocity_y',
             'dens', 'deni', 'vlxi', 'vlyi', 'vlzi'))
+parser.add_argument('-v', '--vel', action='store_true',
+        help='annotate velocity', default=False)
 args = parser.parse_args()
 
 # Load the dataset.
@@ -35,7 +37,7 @@ def plot_h5(filename):
             axes_unit='au',
 #             center=([0.5, 0.5, 0.5], 'unitary'),
             origin="native")
-    p.annotate_velocity(factor = 32)
+    if args.vel: p.annotate_velocity(factor = 32)
     p.save()
 
 if args.filename:
