@@ -20,6 +20,14 @@ args = parser.parse_args()
 
 def plot_h5(filename):
     ds = yt.load(filename)
+    if args.axis==1:
+        # Flip the x and y axis for 'y' normal axis
+        # http://nbviewer.ipython.org/gist/ngoldbaum/0f9ebc92ca7422ded2d5
+        ds.coordinates.x_axis['y'] = 0
+        ds.coordinates.x_axis[1] = 0
+        ds.coordinates.y_axis['y'] = 2
+        ds.coordinates.y_axis[1] = 2
+
     print(ds.field_list)
     print(ds.domain_width)
     p = yt.SlicePlot(ds, args.axis, args.field,
