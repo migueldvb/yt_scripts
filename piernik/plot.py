@@ -28,9 +28,6 @@ def plot_h5(filename):
         ds.coordinates.y_axis['y'] = 2
         ds.coordinates.y_axis[1] = 2
 
-    print(ds.length_unit)
-    print(ds.domain_left_edge, ds.domain_right_edge)
-    print(ds.quan(1.0, 'unitary').in_units('code_length'))
     print(ds.field_list)
     print(ds.domain_width)
     p = yt.SlicePlot(ds, args.axis, args.field,
