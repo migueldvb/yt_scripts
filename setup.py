@@ -8,5 +8,6 @@ setup(name='yt_scripts',
     author_email='miguel@archlinux.net',
     version='0.1',
     scripts=['piernik/plot.py',
+             'piernik/plot_rendering.py',
         ],
     )
