@@ -26,12 +26,13 @@ if use_log:
 # Instantiate the ColorTransferfunction.
 tf = yt.ColorTransferFunction((mi, ma))
 
+print(ds)
 c = (ds.domain_right_edge + ds.domain_left_edge)/2.0
 L = np.array([1.0, 1.0, 1.0])
-W = np.array([30., 20., 8.])
-N = 512
+W = ds.domain_right_edge - ds.domain_left_edge
+N = 1024
 
-tf.add_layers(10, 0.01, colormap = 'RdBu_r')
+tf.add_layers(10, 0.01, colormap = 'spectral')
 cam = ds.camera(c, L, W, N, tf, fields = [args.field], log_fields = [True])
 
 im = cam.snapshot('test_rendering.png')
