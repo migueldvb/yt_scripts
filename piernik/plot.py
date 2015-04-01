@@ -12,7 +12,9 @@ parser.add_argument('-f', '--filename', help='HDF5 file', default="")
 parser.add_argument('-a', '--axis', type=int, help='axis', default=2)
 parser.add_argument('--field', help='field variable', default="density",
         choices=('density', 'velocity_x', 'velocity_y',
-            'dens', 'denn', 'dend', 'deni', 'vlxi', 'vlyi', 'vlzi'))
+            'dens', 'denn', 'dend', 'deni',
+            'vlxi', 'vlyi', 'vlzi', 'vlxn', 'vlyn', 'vlzn',
+            'velx', 'vely', 'velz'))
 parser.add_argument('-v', '--vel', action='store_true',
         help='annotate velocity', default=False)
 parser.add_argument('--vel_factor', type=int,
