@@ -35,11 +35,11 @@ N = 1024
 # tf.add_layers(10, 0.01, colormap = 'RdBu_r')
 tf.add_layers(10, 0.01, colormap = args.colormap)
 
-for t in range(1):
-    phi = t/19.*2*np.pi
+for t in range(20):
+    phi = -t/19.*2*np.pi - np.pi/2.
     x = np.cos(phi)
     y = np.sin(phi)
-    L = np.array([0, -1., np.tan(20*np.pi/180)])
+    L = np.array([x, y, np.tan(20*np.pi/180)])
     cam = ds.camera(c, L, W, N, tf,
         north_vector=[0., 0., 1.],
         fields = [args.field], log_fields = [True])
