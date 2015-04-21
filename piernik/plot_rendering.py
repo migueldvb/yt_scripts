@@ -9,19 +9,18 @@ parser.add_argument('-f', '--filename', help='HDF5 file', default="")
 parser.add_argument('--field', help='field variable', default="density",
         choices=('density', 'velocity_x', 'velocity_y',
             'dens', 'denn', 'dend', 'deni', 'vlxi', 'vlyi', 'vlzi'))
+parser.add_argument('-l', '--linear', action='store_false',
+        dest='log', help='linear scale', default=True)
 args = parser.parse_args()
 
 ds = yt.load(args.filename)
-
-# Do you want the log of the field?
-use_log = True
 
 # Find the bounds in log space of for your field
 dd = ds.all_data()
 mi, ma = dd.quantities.extrema(args.field)
 
-if use_log:
-    mi, ma = np.log10(mi), np.log10(ma)
+if args.log:
+    mi, ma = np.log10(mi), np.log10(.8*ma)
 
 # Instantiate the ColorTransferfunction.
 tf = yt.ColorTransferFunction((mi, ma))
