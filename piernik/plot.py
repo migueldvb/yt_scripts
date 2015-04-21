@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 import yt
 from os.path import join
@@ -17,6 +17,8 @@ parser.add_argument('--field', help='field variable', default="density",
             'velx', 'vely', 'velz'))
 parser.add_argument('-v', '--vel', action='store_true',
         help='annotate velocity', default=False)
+parser.add_argument('--vel_norm', action='store_true',
+        help='normalize annotate velocity', default=False)
 parser.add_argument('--vel_factor', type=int,
         help='annotate velocity', default=32)
 parser.add_argument('-l', '--linear', action='store_false',
@@ -44,7 +46,8 @@ def plot_h5(filename):
 #             center=([0.5, 0.5, 0.5], 'unitary'),
             origin="native")
     p.set_log(args.field, args.log)
-    if args.vel: p.annotate_velocity(factor = args.vel_factor)
+    if args.vel:
+        p.annotate_velocity(factor = args.vel_factor, normalize=args.vel_norm)
     p.save()
 
 if args.filename:
