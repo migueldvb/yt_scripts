@@ -28,18 +28,23 @@ tf = yt.ColorTransferFunction((mi, ma))
 
 print(ds)
 c = (ds.domain_right_edge + ds.domain_left_edge)/2.0
-L = np.array([0., -1., np.arctan(20*np.pi/180)])
 W = (ds.domain_right_edge - ds.domain_left_edge)[0]
-# N = np.array([1024, 768])
+# N = np.array([1024, int(np.arctan(20*np.pi/180)*1024)])
 N = 1024
 
 # tf.add_layers(10, 0.01, colormap = 'RdBu_r')
 tf.add_layers(10, 0.01, colormap = args.colormap)
-cam = ds.camera(c, L, W, N, tf,
+
+for t in range(1):
+    phi = t/19.*2*np.pi
+    x = np.cos(phi)
+    y = np.sin(phi)
+    L = np.array([0, -1., np.tan(20*np.pi/180)])
+    cam = ds.camera(c, L, W, N, tf,
         north_vector=[0., 0., 1.],
         fields = [args.field], log_fields = [True])
 
-im = cam.snapshot('{0}_rendering.png'.format(args.filename[:-3]))
+    im = cam.snapshot('{0}_rendering_{1:02d}.png'.format(args.filename[:-3], t))
 
 # nim = cam.draw_domain(im)
 # im = cam.snapshot('{0}_rendering_with_grid.png'.format(args.filename[:-3]))
