@@ -19,6 +19,8 @@ parser.add_argument('-v', '--vel', action='store_true',
         help='annotate velocity', default=False)
 parser.add_argument('--vel_norm', action='store_true',
         help='normalize annotate velocity', default=False)
+parser.add_argument('--stream', action='store_true',
+        help='annotate streamlines', default=False)
 parser.add_argument('--vel_factor', type=int,
         help='annotate velocity', default=32)
 parser.add_argument('-l', '--linear', action='store_false',
@@ -48,6 +50,8 @@ def plot_h5(filename):
     p.set_log(args.field, args.log)
     if args.vel:
         p.annotate_velocity(factor = args.vel_factor, normalize=args.vel_norm)
+    if args.stream:
+        p.annotate_streamlines('velocity_x', 'velocity_y')
     p.save()
 
 if args.filename:
