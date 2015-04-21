@@ -11,6 +11,7 @@ parser.add_argument('--field', help='field variable', default="density",
             'dens', 'denn', 'dend', 'deni', 'vlxi', 'vlyi', 'vlzi'))
 parser.add_argument('-l', '--linear', action='store_false',
         dest='log', help='linear scale', default=True)
+parser.add_argument('-c', '--colormap', help='colormap', default="jet")
 args = parser.parse_args()
 
 ds = yt.load(args.filename)
@@ -32,10 +33,11 @@ W = (ds.domain_right_edge - ds.domain_left_edge)[0]
 # N = np.array([1024, 768])
 N = 1024
 
-tf.add_layers(10, 0.01, colormap = 'RdBu_r')
+# tf.add_layers(10, 0.01, colormap = 'RdBu_r')
+tf.add_layers(10, 0.01, colormap = args.colormap)
 cam = ds.camera(c, L, W, N, tf, fields = [args.field], log_fields = [True])
 
 im = cam.snapshot('{0}_rendering.png'.format(args.filename[:-3]))
 
-nim = cam.draw_grids(im)
-im = cam.snapshot('{0}_rendering_with_grid.png'.format(args.filename[:-3]))
+# nim = cam.draw_domain(im)
+# im = cam.snapshot('{0}_rendering_with_grid.png'.format(args.filename[:-3]))
