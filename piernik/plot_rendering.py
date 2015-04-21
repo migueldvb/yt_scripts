@@ -20,7 +20,7 @@ dd = ds.all_data()
 mi, ma = dd.quantities.extrema(args.field)
 
 if args.log:
-    mi, ma = np.log10(mi), np.log10(.8*ma)
+    mi, ma = np.log10(mi), np.log10(0.4*ma)
 
 # Instantiate the ColorTransferfunction.
 tf = yt.ColorTransferFunction((mi, ma))
@@ -36,3 +36,6 @@ tf.add_layers(10, 0.01, colormap = 'RdBu_r')
 cam = ds.camera(c, L, W, N, tf, fields = [args.field], log_fields = [True])
 
 im = cam.snapshot('{0}_rendering.png'.format(args.filename[:-3]))
+
+nim = cam.draw_grids(im)
+im = cam.snapshot('{0}_rendering_with_grid.png'.format(args.filename[:-3]))
