@@ -12,6 +12,8 @@ parser.add_argument('--field', help='field variable', default="density",
 parser.add_argument('-l', '--linear', action='store_false',
         dest='log', help='linear scale', default=True)
 parser.add_argument('-c', '--colormap', help='colormap', default="jet")
+parser.add_argument('-n', '--number', default=10,
+        help='Number of Gaussians')
 args = parser.parse_args()
 
 ds = yt.load(args.filename)
@@ -33,7 +35,7 @@ W = (ds.domain_right_edge - ds.domain_left_edge)[0]
 N = 1024
 
 # tf.add_layers(10, 0.01, colormap = 'RdBu_r')
-tf.add_layers(10, 0.01, colormap = args.colormap)
+tf.add_layers(args.number, 0.01, colormap = args.colormap)
 
 for t in range(20):
     phi = -t/19.*2*np.pi - np.pi/2.
