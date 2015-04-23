@@ -36,15 +36,17 @@ args = parser.parse_args()
 # ds = yt.load(join(basedir, "roche_tst_0020.h5"))
 # Create density slices in all three axes.
 
+def flip(ds):
+    # Flip the x and y axis for 'y' normal axis
+    # http://nbviewer.ipython.org/gist/ngoldbaum/0f9ebc92ca7422ded2d5
+    ds.coordinates.x_axis['y'] = 0
+    ds.coordinates.x_axis[1] = 0
+    ds.coordinates.y_axis['y'] = 2
+    ds.coordinates.y_axis[1] = 2
+
 def plot_h5(filename):
     ds = yt.load(filename)
-    if args.axis==1:
-        # Flip the x and y axis for 'y' normal axis
-        # http://nbviewer.ipython.org/gist/ngoldbaum/0f9ebc92ca7422ded2d5
-        ds.coordinates.x_axis['y'] = 0
-        ds.coordinates.x_axis[1] = 0
-        ds.coordinates.y_axis['y'] = 2
-        ds.coordinates.y_axis[1] = 2
+    if args.axis==1: flip(ds)
 
     print(ds.field_list)
     print(ds.domain_width)
@@ -72,6 +74,7 @@ def plot_projection(filename):
                                     axes_unit='au',
                                     north_vector=north_vector)
     else:
+        if args.axis==1: flip(ds)
         prj = yt.ProjectionPlot(ds, args.axis, args.field,
                                     axes_unit='au'
                                     )
