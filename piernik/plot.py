@@ -28,6 +28,8 @@ parser.add_argument('--vel_factor', type=int,
         help='annotate velocity', default=32)
 parser.add_argument('-l', '--linear', action='store_false',
         dest='log', help='linear scale', default=True)
+parser.add_argument('-n', '--normal', nargs=3, type=int,
+        help='vector normal to cutting plane')
 args = parser.parse_args()
 
 # Load the dataset.
@@ -63,11 +65,16 @@ def plot_projection(filename):
     print(ds.field_list)
     print(ds.domain_width)
 
-    L = [1,1,0] # vector normal to cutting plane
-    north_vector = [0,0,1]
-    prj = yt.OffAxisProjectionPlot(ds, L, args.field,
+    if args.normal:
+        L = args.normal
+        north_vector = [0,0,1]
+        prj = yt.OffAxisProjectionPlot(ds, L, args.field,
                                     axes_unit='au',
                                     north_vector=north_vector)
+    else:
+        prj = yt.ProjectionPlot(ds, args.axis, args.field,
+                                    axes_unit='au'
+                                    )
     prj.save()
 
 if args.proj:
