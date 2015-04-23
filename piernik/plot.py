@@ -11,12 +11,15 @@ parser.add_argument('--dir', help='data directory',
 parser.add_argument('-f', '--filename', help='HDF5 file', default="")
 parser.add_argument('-a', '--axis', type=int, help='axis', default=2)
 parser.add_argument('--field', help='field variable', default="density",
-        choices=('density', 'velocity_x', 'velocity_y',
+        choices=('density', 'velocity_x', 'velocity_y', 'temperature',
+            'specific_energy',
             'dens', 'denn', 'dend', 'deni',
             'vlxi', 'vlyi', 'vlzi', 'vlxn', 'vlyn', 'vlzn',
             'velx', 'vely', 'velz'))
 parser.add_argument('-v', '--vel', action='store_true',
         help='annotate velocity', default=False)
+parser.add_argument('-p', '--proj', action='store_true',
+        help='plot projection', default=False)
 parser.add_argument('--vel_norm', action='store_true',
         help='normalize annotate velocity', default=False)
 parser.add_argument('--stream', action='store_true',
@@ -46,7 +49,8 @@ def plot_h5(filename):
     p = yt.SlicePlot(ds, args.axis, args.field,
             axes_unit='au',
 #             center=([0.5, 0.5, 0.5], 'unitary'),
-            origin="native")
+            origin="native"
+            )
     p.set_log(args.field, args.log)
     if args.vel:
         p.annotate_velocity(factor = args.vel_factor, normalize=args.vel_norm)
@@ -54,10 +58,27 @@ def plot_h5(filename):
         p.annotate_streamlines('velocity_x', 'velocity_y')
     p.save()
 
+def plot_projection(filename):
+    ds = yt.load(filename)
+    print(ds.field_list)
+    print(ds.domain_width)
+
+    L = [1,1,0] # vector normal to cutting plane
+    north_vector = [0,0,1]
+    prj = yt.OffAxisProjectionPlot(ds, L, args.field,
+                                    axes_unit='au',
+                                    north_vector=north_vector)
+    prj.save()
+
+if args.proj:
+    fplot = plot_projection
+else:
+    fplot = plot_h5
+
 if args.filename:
-    plot_h5(args.filename)
+    fplot(args.filename)
 elif args.dir:
     for i in glob.glob(join(args.dir, '*.h5')):
-        plot_h5(i)
+        fplot(i)
 else:
     print("Provide file name or directory")
