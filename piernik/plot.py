@@ -4,6 +4,7 @@ import yt
 from os.path import join
 import argparse
 import glob
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dir', help='data directory',
@@ -50,17 +51,26 @@ def plot_h5(filename):
 
     print(ds.field_list)
     print(ds.domain_width)
-    p = yt.SlicePlot(ds, args.axis, args.field,
-            axes_unit='au',
+    if args.normal:
+        L = args.normal
+        north_vector = [0,0,1]
+        W = (ds.domain_right_edge - ds.domain_left_edge)[0]
+        cut = yt.SlicePlot(ds, L, args.field, width=W,
+                            axes_unit='au',
+                            north_vector=north_vector)
+        cut.save()
+    else:
+        p = yt.SlicePlot(ds, args.axis, args.field,
+                axes_unit='au',
 #             center=([0.5, 0.5, 0.5], 'unitary'),
-            origin="native"
-            )
-    p.set_log(args.field, args.log)
-    if args.vel:
-        p.annotate_velocity(factor = args.vel_factor, normalize=args.vel_norm)
-    if args.stream:
-        p.annotate_streamlines('velocity_x', 'velocity_y')
-    p.save()
+                origin="native"
+                )
+        p.set_log(args.field, args.log)
+        if args.vel:
+            p.annotate_velocity(factor = args.vel_factor, normalize=args.vel_norm)
+        if args.stream:
+            p.annotate_streamlines('velocity_x', 'velocity_y')
+        p.save()
 
 def plot_projection(filename):
     ds = yt.load(filename)
@@ -70,15 +80,24 @@ def plot_projection(filename):
     if args.normal:
         L = args.normal
         north_vector = [0,0,1]
+        c = (ds.domain_right_edge + ds.domain_left_edge)/2.0
+        print(ds.domain_right_edge - ds.domain_left_edge)
+        W = (ds.domain_right_edge - ds.domain_left_edge)[0::2]
+        W = (ds.domain_right_edge - ds.domain_left_edge)[0]
+        N = 1024
         prj = yt.OffAxisProjectionPlot(ds, L, args.field,
-                                    axes_unit='au',
-                                    north_vector=north_vector)
+                    center=c, width=W, axes_unit='au',
+                    north_vector=north_vector)
+        prj.save()
+        image = yt.off_axis_projection(ds, c, L, W, N, args.field)
+        yt.write_image(np.log10(image), "%s_offaxis_projection.png" % ds)
     else:
         if args.axis==1: flip(ds)
         prj = yt.ProjectionPlot(ds, args.axis, args.field,
                                     axes_unit='au'
                                     )
-    prj.save()
+        prj.set_log(args.field, args.log)
+        prj.save()
 
 if args.proj:
     fplot = plot_projection
