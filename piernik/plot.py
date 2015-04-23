@@ -89,8 +89,11 @@ def plot_projection(filename):
                     center=c, width=W, axes_unit='au',
                     north_vector=north_vector)
         prj.save()
+        ratio = L[2]/np.linalg.norm(L)*0.95
+        print(ratio)
         image = yt.off_axis_projection(ds, c, L, W, N, args.field)
-        yt.write_image(np.log10(image), "%s_offaxis_projection.png" % ds)
+        yt.write_image(np.log10(image[N/2-int(ratio*N):N/2+int(ratio*N),:]),
+                        "{0}_offaxis_projection.png".format(ds))
     else:
         if args.axis==1: flip(ds)
         prj = yt.ProjectionPlot(ds, args.axis, args.field,
