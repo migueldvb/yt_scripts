@@ -85,10 +85,10 @@ def plot_projection(filename):
         W = (ds.domain_right_edge - ds.domain_left_edge)[0::2]
         W = (ds.domain_right_edge - ds.domain_left_edge)[0]
         N = 1024
-        prj = yt.OffAxisProjectionPlot(ds, L, args.field,
-                    center=c, width=W, axes_unit='au',
-                    north_vector=north_vector)
-        prj.save()
+#         prj = yt.OffAxisProjectionPlot(ds, L, args.field,
+#                     center=c, width=W, axes_unit='au',
+#                     north_vector=north_vector)
+#         prj.save()
         ratio = L[2]/np.linalg.norm(L)*0.95
         print(ratio)
         image = yt.off_axis_projection(ds, c, L, W, N, args.field)
