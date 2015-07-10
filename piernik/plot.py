@@ -31,6 +31,8 @@ parser.add_argument('-l', '--linear', action='store_false',
         dest='log', help='linear scale', default=True)
 parser.add_argument('-n', '--normal', nargs=3, type=int,
         help='vector normal to cutting plane')
+parser.add_argument('--ratio', type=float,
+        help='figure axes ratio', default=0)
 args = parser.parse_args()
 
 # Load the dataset.
@@ -80,16 +82,22 @@ def plot_projection(filename):
     if args.normal:
         L = args.normal
         north_vector = [0,0,1]
+        # center position
         c = (ds.domain_right_edge + ds.domain_left_edge)/2.0
         print(ds.domain_right_edge - ds.domain_left_edge)
+        # width
         W = (ds.domain_right_edge - ds.domain_left_edge)[0::2]
         W = (ds.domain_right_edge - ds.domain_left_edge)[0]
+        # figure width in pixels
         N = 1024
 #         prj = yt.OffAxisProjectionPlot(ds, L, args.field,
 #                     center=c, width=W, axes_unit='au',
 #                     north_vector=north_vector)
 #         prj.save()
-        ratio = L[2]/np.linalg.norm(L)*0.95
+        if args.ratio:
+            ratio = args.ratio
+        else:
+            ratio = L[2]/np.linalg.norm(L)*0.95
         print(ratio)
         image = yt.off_axis_projection(ds, c, L, W, N, args.field)
         yt.write_image(np.log10(image[N/2-int(ratio*N):N/2+int(ratio*N),:]),
